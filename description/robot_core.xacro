@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="color.xacro"/>
+
+      <!-- Base_Link -->
+    <link name="base_link">
+
+    </link>
+
+    <!-- CHASSIS LINK -->
+
+     <joint name="chassis_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="chassis"/>
+        <origin xyz="-0.1 0 0 "/>
+    </joint>
+
+    <link name="chassis">
+        <visual>
+            <origin xyz=""/>
+            <geometry>
+                <cylinder radius= "0.60" length="0.30"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+      
+    </link>
+</robot>
