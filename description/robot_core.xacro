@@ -1,29 +1,236 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="cleaner_bot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <xacro:include filename="color.xacro"/>
+    <!-- base structure -->
+    <xacro:property name="srct_radius" value="0.030"/>
+    <xacro:property name="srct_length" value="0.30"/>
+    <!-- brush  -->
+    <xacro:property name="brush_radius" value="0.035"/>
+    <xacro:property name="brush_length" value="0.03"/>
+    <!--brush offset-->
+    <xacro:property name="brs_off" value="0.1"/>
+    <!-- wheels  -->
+    <xacro:property name="wheel_radius" value="0.005"/>
+    <xacro:property name="wheel_length" value="0.01"/>
+    <!--wheel offset-->
+    <xacro:property name="whl_off" value="0.1"/>
+    <!-- support -->
+    <xacro:property name="spt_radius" value="0.005"/>
+    <xacro:property name="spt_length" value="0.01"/>
+    <!--support offset-->
+    <xacro:property name="spt_off" value="0.03"/>
+    <!--caster wheel-->
+    <xacro:property name="caster_radius" value="0.005"/>
+    <!--caster wheel offset-->
+    <xacro:property name="cst_off" value="0.03"/>
 
-      <!-- Base_Link -->
-    <link name="base_link">
+        <!-- creating base link -->
+
+    <link name="base_link" >
 
     </link>
 
-    <!-- CHASSIS LINK -->
+        <!-- creating structure -->
 
-     <joint name="chassis_joint" type="fixed">
+    <link name="srct_link" >
+        <visual>
+            <geometry>
+                <cylinder radius="${srct_radius}" length="${srct_length}" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+            <material name= "white" />
+        </visual>
+    
+    </link>
+
+
+    <joint name="base_srct_joint" type="fixed">
         <parent link="base_link"/>
-        <child link="chassis"/>
-        <origin xyz="-0.1 0 0 "/>
+        <child link="srct_link" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
     </joint>
 
-    <link name="chassis">
+        <!-- creating cleaning brush -->
+
+    <link name="ft_brush_link">
         <visual>
-            <origin xyz=""/>
             <geometry>
-                <cylinder radius= "0.60" length="0.30"/>
+                <cylinder radius="${brush_radius}" length="${brush_length}" />
             </geometry>
+            <origin xyz="-${brs_off} 0 0" rpy="0 ${pi/2} 0"/>
+            <material name= "blue" />
+        </visual>
+    </link>
+
+
+    <joint name="base1_brush_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="ft_brush_link" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+    </joint>
+
+
+    <link name="sd_brush_link">
+        <visual>
+            <geometry>
+                <cylinder radius="${brush_radius}" length="${brush_length}" />
+            </geometry>
+            <origin xyz="-${brs_off - 0.04} 0 0" rpy="0 ${pi/2} 0"/>
+            <material name= "blue" />
+        </visual>
+    </link>
+
+
+    <joint name="base2_brush_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="sd_brush_link" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+    </joint>
+    
+        <!-- creating wheels -->
+
+        <!-- first wheel -->
+
+    <link name= "a_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+            </geometry>
+            <origin xyz="${whl_off} 0 ${whl_off- 0.07}" rpy=" 0 ${pi/2} 0" />
             <material name="orange"/>
         </visual>
-      
     </link>
-</robot>
+
+
+    <joint name="n_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="a_wheel_link" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+    </joint>
+
+        <!-- second wheel -->
+
+    <link name= "b_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+            </geometry>
+            <origin xyz="${whl_off} 0 -${whl_off- 0.07}" rpy=" 0 ${pi/2} 0" />
+            <material name="orange"/>
+        </visual>
+        
+    </link>
+       
+
+    <joint name="s_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="b_wheel_link" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+    </joint>
+
+        <!-- third wheel -->
+
+    <link name= "c_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+            </geometry>
+            <origin xyz="${whl_off} ${whl_off- 0.07} 0" rpy=" 0 ${pi/2} 0" />
+            <material name="orange"/>
+        </visual>
+    </link>
+
+
+    <joint name="w_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="c_wheel_link" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+    </joint>
+
+        <!-- fourt wheel -->
+
+    <link name= "d_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+            </geometry>
+            <origin xyz="${whl_off} -${whl_off- 0.07} 0" rpy=" 0 ${pi/2} 0" />
+            <material name="orange"/>
+        </visual>
+    </link>
+
+
+    <joint name="e_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="d_wheel_link" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+    </joint>
+
+        <!-- support wheel -->
+
+    <link name= "spf_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="${spt_radius}" length="${spt_length}" />
+            </geometry>
+            <origin xyz="${spt_off} ${spt_off} -${spt_off - 0.02}" rpy="0 -${pi/4} 0" />
+            <material name="orange"/>
+        </visual>
+    </link>
+
+
+    <joint name="s1_wheel_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="spf_wheel_link" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+    </joint>
+
+
+    <link name= "sps_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="${spt_radius}" length="${spt_length}" />
+            </geometry>
+            <origin xyz="${spt_off} -${spt_off} ${spt_off - 0.02}" rpy="0 ${pi/4} 0" />
+            <material name="orange"/>
+        </visual>
+    </link>
+
+
+    <joint name="s2_wheel joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="sps_wheel_link" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+    </joint>
+
+        <!-- caster wheel -->
+
+    <link name= "caster_link">
+        <visual>
+            <geometry>
+                <sphere radius="${caster_radius}" />
+            </geometry>
+            <origin xyz="${cst_off + 0.115} 0 -${cst_off}" rpy="0 0 0" />
+            <material name="orange"/>
+        </visual>
+    </link>
+
+    <joint name="caster_wheel joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="caster_link" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+    </joint>
+   
+
+</robot> 
